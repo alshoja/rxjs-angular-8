@@ -13,7 +13,7 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  public getClients(): Observable<Post[]> {
+  public getPosts(): Observable<Post[]> {
     const head = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ export class UserService {
       // 'Authorization': 'Bearer '+token
     })
 
-    return this.http.get<Comments[]>(this.url + 'posts', { headers: head })
+    return this.http.get<Comments[]>(this.url + 'comments', { headers: head })
   }
  
 }
