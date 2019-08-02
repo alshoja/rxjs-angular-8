@@ -1,10 +1,11 @@
 import { Comments } from './Model/comments';
 import { UserService } from './user.service';
 import { Component, OnDestroy, ChangeDetectionStrategy, OnInit } from '@angular/core';
-import { timer, of, forkJoin, Observable, Subject, interval, concat, from } from 'rxjs';
+import { timer, of, forkJoin, Observable, Subject, interval, concat, from, fromEvent } from 'rxjs';
 import { switchMap, takeUntil, catchError, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { filter, map, flatMap } from 'rxjs/operators';
 import { Post } from './Model/post';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'California', 'Colorado',
   'Connecticut', 'Delaware', 'District Of Columbia', 'Federated States Of Micronesia', 'Florida', 'Georgia',
@@ -26,25 +27,39 @@ const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'C
 export class AppComponent implements OnInit {
   title = 'angularrxjs';
   items: {};
+  post: Post;
   public searchTerm: string;
-  constructor(private UserService: UserService) {
+
+  constructor(private UserService: UserService, private formBuilder: FormBuilder) {
 
 
   }
 
   ngOnInit() {
-    //  this.tricks();
-    // this.Forkjoin();
-    this.obs()
-
+    this.searchBook()
   }
+
+  postId = new FormControl();
+  bookForm: FormGroup = this.formBuilder.group({
+    postId: this.postId
+  });
+
+  public searchBook() {
+    this.postId.valueChanges.pipe(
+      debounceTime(500),
+      switchMap(id => {
+        console.log(id);
+        return this.UserService.getpost(id);
+      })
+    ).subscribe(res =>  console.log(res) );
+  }
+
   public test() {
     interval(1000)
       .pipe(
         flatMap(() => this.UserService.getPosts())
       )
       .subscribe(
-
         data => {
           this.items = data
           console.log(this.items);

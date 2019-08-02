@@ -48,7 +48,7 @@ In this simple example, a search is done no matter the content of the input:
 </ul>
 
 <label for="typeahead-focus">Search for a state:</label>
-
+<input type="text" id="search-box" />
 <hr>
 
       </ng-template>
@@ -68,6 +68,16 @@ In this simple example, a search is done no matter the content of the input:
     </ngb-panel>
    
   </ngb-accordion>
+
+  <h3>Search Book</h3>
+    <form [formGroup]="bookForm">
+      ID: <input formControlName="postId">
+    </form>
+    <br/>
+    <div *ngIf="post">
+      Id: {{post.id}}, Name: {{post.userId}}, Category: {{post.title}}
+    </div>
+
 <ul>
 <li *ngFor="let item of items">{{item.title}}</li>
 

@@ -1,9 +1,11 @@
 import { Comments } from './Model/comments';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Post } from './Model/post';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +33,18 @@ export class UserService {
     })
 
     return this.http.get<Comments[]>(this.url + 'comments', { headers: head })
+  }
+
+  public getpost(id): Observable<Post[]>{
+    const head = new HttpHeaders({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      // 'Authorization': 'Bearer '+token
+    })
+
+    return this.http.get<Post[]>(this.url + 'posts/'+id, { headers: head }).pipe(
+      catchError(err => of(null))
+    )
   }
  
 }
